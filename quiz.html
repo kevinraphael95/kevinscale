@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KevinScale — Quiz</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header>
+  <div id="header">
+    <div class="headerLeft">
+      <a href="index.html" title="Accueil"><i class="fa fa-home"></i></a>
+      <a href="index.html#help" title="Aide"><i class="fa fa-question-circle"></i></a>
+    </div>
+    <div class="headerMiddle">
+      <h1><a href="index.html">KevinScale</a></h1>
+    </div>
+    <div class="headerRight"></div>
+  </div>
+</header>
+
+<div class="quiz-wrap">
+
+  <div class="progress-bar-wrap">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <span id="q-progress-label" style="font-size:0.82rem;color:#888;letter-spacing:.5px;text-transform:uppercase;">Question 1 sur —</span>
+    </div>
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" id="progress-fill"></div>
+    </div>
+  </div>
+
+  <div class="q-text" id="q-text">Chargement…</div>
+
+  <div class="answer-list" id="answer-list"></div>
+
+  <div class="quiz-nav">
+    <button class="btn-prev" id="btn-prev" onclick="prevQ()" disabled>← Précédent</button>
+    <button class="btn-next" id="btn-next" onclick="nextQ()" disabled>Suivant →</button>
+  </div>
+
+</div>
+
+<footer>
+  Un test inspiré de <a href="https://politiscales.fr" target="_blank">PolitiScales</a>. Résultats calculés localement · Aucune donnée collectée.
+</footer>
+
+<script src="questions.js"></script>
+<script>
+(function() {
+  "use strict";
+
+  const ANSWERS = [
+    { text: "Absolument d'accord",  cls: "agree-2"    },
+    { text: "Plutôt d'accord",      cls: "agree-1"    },
+    { text: "Neutre ou hésitant",   cls: "neutral"    },
+    { text: "Plutôt pas d'accord",  cls: "disagree-1" },
+    { text: "Pas du tout d'accord", cls: "disagree-2" },
+  ];
+
+  const WEIGHTS = [2, 1, 0, 1, 2];
+
+  let state = { current: 0, answers: {}, shuffled: [] };
+
+  function shuffle(arr) {
+    const byAxis = {};
+    arr.forEach(q => {
+      const ax = q.effect[0].axis;
+      if (!byAxis[ax]) byAxis[ax] = [];
+      byAxis[ax].push(q);
+    });
+    Object.values(byAxis).forEach(g => {
+      for (let i = g.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [g[i], g[j]] = [g[j], g[i]];
+      }
+    });
+    const keys = Object.keys(byAxis);
+    const result = [];
+    let round = 0;
+    while (result.length < arr.length) {
+      keys.forEach(k => { if (byAxis[k][round]) result.push(byAxis[k][round]); });
+      round++;
+    }
+    return result;
+  }
+
+  function render(index) {
+    const q = state.shuffled[index];
+    if (!q) return;
+
+    const total = state.shuffled.length;
+    const pct = Math.round((index / total) * 100);
+
+    document.getElementById("q-text").textContent = q.text;
+    document.getElementById("q-progress-label").textContent = `Question ${index + 1} sur ${total}`;
+    document.getElementById("progress-fill").style.width = pct + "%";
+
+    const list = document.getElementById("answer-list");
+    list.innerHTML = "";
+
+    ANSWERS.forEach((opt, i) => {
+      const btn = document.createElement("button");
+      btn.className = "ans-btn " + opt.cls;
+      btn.textContent = opt.text;
+      if (state.answers[q.id] === i) btn.classList.add("selected");
+      btn.addEventListener("click", () => select(q.id, i));
+      list.appendChild(btn);
+    });
+
+    // Bouton retour accueil
+    const backBtn = document.createElement("button");
+    backBtn.className = "ans-btn back-btn";
+    backBtn.textContent = "Retour à l'accueil";
+    backBtn.addEventListener("click", () => { window.location.href = "index.html"; });
+    list.appendChild(backBtn);
+
+    document.getElementById("btn-prev").disabled = index === 0;
+    const nextBtn = document.getElementById("btn-next");
+    nextBtn.disabled = state.answers[q.id] === undefined;
+    nextBtn.textContent = index === total - 1 ? "Voir mes résultats →" : "Suivant →";
+  }
+
+  function select(qId, val) {
+    state.answers[qId] = val;
+    sessionStorage.setItem("ks_answers", JSON.stringify(state.answers));
+    document.querySelectorAll(".ans-btn:not(.back-btn)").forEach((b, i) => {
+      b.classList.toggle("selected", i === val);
+    });
+    document.getElementById("btn-next").disabled = false;
+  }
+
+  window.nextQ = function() {
+    const q = state.shuffled[state.current];
+    if (state.answers[q.id] === undefined) return;
+    if (state.current >= state.shuffled.length - 1) {
+      // Calcul scores
+      const axisScores = {};
+      AXES.forEach(a => axisScores[a.id] = { sum: 0, max: 0 });
+      state.shuffled.forEach(q => {
+        const val = state.answers[q.id];
+        if (val === undefined) return;
+        const w = WEIGHTS[val];
+        const dir = val <= 1 ? 1 : val >= 3 ? -1 : 0;
+        const delta = w * dir;
+        q.effect.forEach(({ axis, agree }) => {
+          axisScores[axis].sum += agree ? delta : -delta;
+          axisScores[axis].max += 2;
+        });
+      });
+      const final = {};
+      AXES.forEach(a => {
+        const { sum, max } = axisScores[a.id];
+        final[a.id] = max === 0 ? 50 : Math.round(((sum + max) / (2 * max)) * 100);
+      });
+      sessionStorage.setItem("ks_scores", JSON.stringify(final));
+      window.location.href = "results.html";
+    } else {
+      state.current++;
+      sessionStorage.setItem("ks_current", state.current);
+      render(state.current);
+    }
+  };
+
+  window.prevQ = function() {
+    if (state.current > 0) {
+      state.current--;
+      sessionStorage.setItem("ks_current", state.current);
+      render(state.current);
+    }
+  };
+
+  // Init — restaurer session si existante
+  const savedAnswers  = sessionStorage.getItem("ks_answers");
+  const savedCurrent  = sessionStorage.getItem("ks_current");
+  const savedShuffled = sessionStorage.getItem("ks_shuffled");
+
+  if (savedShuffled) {
+    const ids = JSON.parse(savedShuffled);
+    const qMap = {};
+    QUESTIONS.forEach(q => qMap[q.id] = q);
+    state.shuffled = ids.map(id => qMap[id]).filter(Boolean);
+  } else {
+    state.shuffled = shuffle([...QUESTIONS]);
+    sessionStorage.setItem("ks_shuffled", JSON.stringify(state.shuffled.map(q => q.id)));
+  }
+
+  if (savedAnswers) state.answers = JSON.parse(savedAnswers);
+  if (savedCurrent) state.current = parseInt(savedCurrent, 10) || 0;
+
+  render(state.current);
+})();
+</script>
+
+</body>
+</html>
