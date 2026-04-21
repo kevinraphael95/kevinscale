@@ -643,3 +643,68 @@ footer a:hover { color: #fff; }
   color: #fff;
   transform: translateY(-1px);
 }
+
+/* ── PAGE ABOUT ──────────────────────────────────────────── */
+.about-wrap {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 40px 20px 60px;
+}
+
+.about-main-title {
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+
+.about-intro {
+  font-size: var(--fs-md);
+  color: var(--text-2);
+  line-height: 1.75;
+  margin-bottom: 40px;
+}
+
+.about-axis {
+  margin-bottom: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid var(--border);
+}
+
+.about-axis:last-of-type {
+  border-bottom: none;
+}
+
+.about-axis-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.about-axis-color {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.about-axis-header h3 {
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  color: var(--text);
+}
+
+.about-axis p {
+  font-size: var(--fs-md);
+  color: var(--text-2);
+  line-height: 1.75;
+  margin-bottom: 10px;
+}
+
+.about-axis p:last-child { margin-bottom: 0; }
+
+.header-active {
+  color: #fff !important;
+}
