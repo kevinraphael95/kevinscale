@@ -52,9 +52,19 @@
     <p>AAAAAAAAAAAAAAAAAAAAAA</p>
   </div>
 
-  <a href="quiz.html" class="btn-start">Démarrer le test</a>
+  <div class="intro-buttons">
+    <a href="quiz.html" class="btn-start" id="btn-new" onclick="sessionStorage.clear()">Démarrer le test</a>
+    <a href="quiz.html" class="btn-resume" id="btn-resume" style="display:none">↩ Reprendre</a>
+  </div>
 
 </div>
+
+<script>
+  // Affiche "Reprendre" seulement si une session est en cours
+  if (sessionStorage.getItem("ks_shuffled") && sessionStorage.getItem("ks_current")) {
+    document.getElementById("btn-resume").style.display = "inline-block";
+  }
+</script>
 
 <footer>
   Un test inspiré de <a href="https://politiscales.fr" target="_blank">PolitiScales</a>.
