@@ -756,13 +756,13 @@ const QUESTIONS = [
 ];
 
 const VERDICTS = [
-  { min: 90, title: "Clone de Kévin",       emoji: "🧬", text: "Statistiquement, tu es Kévin. Vérifiez que vous n'êtes pas la même personne." },
-  { min: 75, title: "Très proche de Kévin", emoji: "🤝", text: "Vous pourriez passer une soirée entière à vous acquiescer mutuellement." },
-  { min: 55, title: "Dans le camp Kevin",   emoji: "✅", text: "Tu partages l'essentiel avec Kévin, quelques désaccords ponctuels." },
-  { min: 40, title: "À mi-chemin",          emoji: "⚖️", text: "Vous vous rejoignez sur certains axes, divergez sur d'autres." },
-  { min: 25, title: "Éloigné de Kévin",     emoji: "🌊", text: "Des planètes idéologiques assez différentes." },
-  { min: 10, title: "Quasi-opposé",         emoji: "❄️", text: "Presque rien en commun. La coexistence est possible." },
-  { min: 0,  title: "L'Anti-Kévin",         emoji: "🚨", text: "Tu es l'exact opposé de Kévin sur quasiment tout." },
+  { min: 90, title: "Kévin?",                   emoji: "🧬", text: "Statistiquement, tu es Kévin." },
+  { min: 75, title: "Très proche de Kévin",     emoji: "🤝", text: "Vous êtes d'accord sur presque tout." },
+  { min: 55, title: "Proche de Kevin",          emoji: "✅", text: "Tu partages l'essentiel avec Kévin." },
+  { min: 40, title: "À mi-chemin",              emoji: "⚖️", text: "Vous vous rejoignez sur certains axes." },
+  { min: 25, title: "Éloigné de Kévin",         emoji: "🌊", text: "Vous êtes très différent." },
+  { min: 10, title: "Quasi-opposé de Kévin",    emoji: "❄️", text: "Presque rien en commun." },
+  { min: 0,  title: "A l'opposé de Kévin",      emoji: "🚨", text: "Tu es l'exact opposé de Kévin sur quasiment tout." },
 ];
 
 if (typeof module !== "undefined") module.exports = { AXES, QUESTIONS, VERDICTS };
