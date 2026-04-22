@@ -62,15 +62,14 @@
     { text: "Pas du tout d'accord", cls: "disagree-2" },
   ];
 
-
   let state = { current: 0, answers: {}, shuffled: [] };
 
+  // ── Mélange par axe (interleaved) ──────────────────────
   function shuffle(arr) {
     const byAxis = {};
     arr.forEach(q => {
-      const ax = q.effect[0].axis;
-      if (!byAxis[ax]) byAxis[ax] = [];
-      byAxis[ax].push(q);
+      if (!byAxis[q.axis]) byAxis[q.axis] = [];
+      byAxis[q.axis].push(q);
     });
     Object.values(byAxis).forEach(g => {
       for (let i = g.length - 1; i > 0; i--) {
@@ -88,10 +87,28 @@
     return result;
   }
 
+  // ── Sélection mode court : 30 questions, ~4 par axe ────
+  function selectShort(all) {
+    const byAxis = {};
+    all.forEach(q => {
+      if (!byAxis[q.axis]) byAxis[q.axis] = [];
+      byAxis[q.axis].push(q);
+    });
+    // Mélanger chaque groupe puis prendre ~4 par axe (30 / 8 ≈ 3-4)
+    const perAxis = Math.ceil(30 / AXES.length); // 4
+    let pool = [];
+    Object.values(byAxis).forEach(g => {
+      const shuffled = [...g].sort(() => Math.random() - .5);
+      pool.push(...shuffled.slice(0, perAxis));
+    });
+    // Si trop (32) → couper à 30 aléatoirement
+    pool = pool.sort(() => Math.random() - .5).slice(0, 30);
+    return shuffle(pool);
+  }
+
   function render(index) {
     const q = state.shuffled[index];
     if (!q) return;
-
     const total = state.shuffled.length;
     const pct = Math.round((index / total) * 100);
 
@@ -101,7 +118,6 @@
 
     const list = document.getElementById("answer-list");
     list.innerHTML = "";
-
     ANSWERS.forEach((opt, i) => {
       const btn = document.createElement("button");
       btn.className = "ans-btn " + opt.cls;
@@ -110,8 +126,6 @@
       btn.addEventListener("click", () => select(q.id, i));
       list.appendChild(btn);
     });
-
-    // Bouton retour accueil
     const backBtn = document.createElement("button");
     backBtn.className = "ans-btn back-btn";
     backBtn.textContent = "Retour à l'accueil";
@@ -122,27 +136,19 @@
   }
 
   function advance() {
-    const q = state.shuffled[state.current];
     if (state.current >= state.shuffled.length - 1) {
-      // Calcul de proximité par axe :
-      // Pour chaque question répondue, on compare la réponse de l'utilisateur
-      // à kevinAnswer (0-4). La proximité = 1 - |userAnswer - kevinAnswer| / 4
-      // → 100% si même réponse, 0% si réponses opposées (0 vs 4)
-      // Si l'utilisateur répond "neutre" (2), on compte quand même la proximité.
-      // Score de l'axe = moyenne des proximités de toutes ses questions répondues.
-
+      // ── Calcul scores par comparaison avec kevinAnswer ──
+      // proximité question = 1 - |userAnswer - kevinAnswer| / 4
+      // score axe = moyenne des proximités de toutes ses questions répondues
       const axisData = {};
       AXES.forEach(a => axisData[a.id] = { total: 0, count: 0 });
 
       state.shuffled.forEach(q => {
         const userVal = state.answers[q.id];
         if (userVal === undefined) return;
-        const kevin   = q.kevinAnswer;
-        const prox    = 1 - Math.abs(userVal - kevin) / 4; // 0.0 → 1.0
-        q.effect.forEach(({ axis }) => {
-          axisData[axis].total += prox;
-          axisData[axis].count += 1;
-        });
+        const prox = 1 - Math.abs(userVal - q.kevinAnswer) / 4;
+        axisData[q.axis].total += prox;
+        axisData[q.axis].count += 1;
       });
 
       const final = {};
@@ -162,7 +168,6 @@
   function select(qId, val) {
     state.answers[qId] = val;
     sessionStorage.setItem("ks_answers", JSON.stringify(state.answers));
-    // Flash sélection puis avancer
     document.querySelectorAll(".ans-btn:not(.back-btn)").forEach((b, i) => {
       b.classList.toggle("selected", i === val);
     });
@@ -177,18 +182,21 @@
     }
   };
 
-  // Init — restaurer session si existante
+  // ── Init ────────────────────────────────────────────────
   const savedAnswers  = sessionStorage.getItem("ks_answers");
   const savedCurrent  = sessionStorage.getItem("ks_current");
   const savedShuffled = sessionStorage.getItem("ks_shuffled");
+  const mode          = sessionStorage.getItem("ks_mode") || "long";
 
   if (savedShuffled) {
-    const ids = JSON.parse(savedShuffled);
+    // Reprendre session existante
+    const ids  = JSON.parse(savedShuffled);
     const qMap = {};
     QUESTIONS.forEach(q => qMap[q.id] = q);
     state.shuffled = ids.map(id => qMap[id]).filter(Boolean);
   } else {
-    state.shuffled = shuffle([...QUESTIONS]);
+    // Nouvelle session
+    state.shuffled = mode === "short" ? selectShort([...QUESTIONS]) : shuffle([...QUESTIONS]);
     sessionStorage.setItem("ks_shuffled", JSON.stringify(state.shuffled.map(q => q.id)));
   }
 

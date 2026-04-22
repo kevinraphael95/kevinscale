@@ -13,7 +13,7 @@
   <div id="header">
     <div class="headerLeft">
       <a href="index.html" title="Accueil"><i class="fa fa-home"></i></a>
-      <a href="about.html" title="Aide"><i class="fa fa-question-circle"></i></a>
+      <a href="#help" title="Aide"><i class="fa fa-question-circle"></i></a>
     </div>
     <div class="headerMiddle">
       <h1><a href="index.html">KevinScale</a></h1>
@@ -49,20 +49,26 @@
 
     <p>Bienvenue sur le <strong>KevinScale</strong>. Vous allez être confronté·e à une série d'affirmations et pour chacune d'entre elles vous devrez cliquer sur le bouton correspondant à votre opinion.</p>
 
-    <p>TEST insérer texte</p>
+    <p>AAAAAAAAAAAAAAAAAAAAAA</p>
   </div>
 
   <div class="intro-buttons">
-    <a href="quiz.html" class="btn-start" id="btn-new" onclick="sessionStorage.clear()">Démarrer le test</a>
-    <a href="quiz.html" class="btn-resume" id="btn-resume" style="display:none">↩ Reprendre</a>
+    <a href="quiz.html" class="btn-start" onclick="startFresh('short')">⚡ Mode court <span class="mode-hint">30 questions</span></a>
+    <a href="quiz.html" class="btn-start btn-start-long" onclick="startFresh('long')">📋 Mode complet <span class="mode-hint">100 questions</span></a>
+  </div>
+  <div id="resume-wrap" style="display:none; margin-top:12px; text-align:center;">
+    <a href="quiz.html" class="btn-resume">↩ Reprendre le test en cours</a>
   </div>
 
 </div>
 
 <script>
-  // Affiche "Reprendre" seulement si une session est en cours
+  function startFresh(mode) {
+    sessionStorage.clear();
+    sessionStorage.setItem("ks_mode", mode);
+  }
   if (sessionStorage.getItem("ks_shuffled") && sessionStorage.getItem("ks_current")) {
-    document.getElementById("btn-resume").style.display = "inline-block";
+    document.getElementById("resume-wrap").style.display = "block";
   }
 </script>
 
