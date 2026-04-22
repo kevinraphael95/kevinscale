@@ -27,35 +27,35 @@ const QUESTIONS = [
     id: "eco_1",
     axis: "economie",
     text: "Les services publics stratégiques (énergie, transports, eau) devraient rester dans les mains de l'État.",
-    kevinAnswer: 3, // Kévin : plutôt pas d'accord (libéral)
+    kevinAnswer: 0, // Kévin
     effect: [{ axis: "economie", agree: false }],
   },
   {
     id: "eco_2",
     axis: "economie",
     text: "La concurrence entre entreprises privées est le meilleur moyen d'améliorer la qualité des services.",
-    kevinAnswer: 1, // Kévin : plutôt d'accord
+    kevinAnswer: 3, // Kévin
     effect: [{ axis: "economie", agree: true }],
   },
   {
     id: "eco_3",
     axis: "economie",
     text: "Un impôt sur la fortune élevé est indispensable pour réduire les inégalités.",
-    kevinAnswer: 3, // Kévin : plutôt pas d'accord
+    kevinAnswer: 0, // Kévin
     effect: [{ axis: "economie", agree: false }],
   },
   {
     id: "eco_4",
     axis: "economie",
     text: "Le marché libre, avec peu de régulation, est le système économique le plus efficace.",
-    kevinAnswer: 1, // Kévin : plutôt d'accord
+    kevinAnswer: 3, // Kévin
     effect: [{ axis: "economie", agree: true }],
   },
   {
     id: "eco_5",
     axis: "economie",
     text: "L'entrepreneur individuel mérite de garder l'essentiel de ce qu'il crée.",
-    kevinAnswer: 0, // Kévin : absolument d'accord
+    kevinAnswer: 3, // Kévin
     effect: [{ axis: "economie", agree: true }],
   },
 
@@ -64,35 +64,35 @@ const QUESTIONS = [
     id: "soc_1",
     axis: "societe",
     text: "Le mariage entre personnes du même sexe est un droit fondamental qui ne devrait pas être remis en cause.",
-    kevinAnswer: 0, // Kévin : absolument d'accord
+    kevinAnswer: 0, // Kévin
     effect: [{ axis: "societe", agree: true }],
   },
   {
     id: "soc_2",
     axis: "societe",
     text: "Les personnes transgenres doivent pouvoir changer leur état civil librement.",
-    kevinAnswer: 1, // Kévin : plutôt d'accord
+    kevinAnswer: 0, // Kévin
     effect: [{ axis: "societe", agree: true }],
   },
   {
     id: "soc_3",
     axis: "societe",
     text: "La famille traditionnelle (homme, femme, enfants) est le modèle le plus stable pour la société.",
-    kevinAnswer: 3, // Kévin : plutôt pas d'accord
+    kevinAnswer: 3, // Kévin
     effect: [{ axis: "societe", agree: false }],
   },
   {
     id: "soc_4",
     axis: "societe",
     text: "La culture populaire actuelle valorise trop peu les valeurs traditionnelles.",
-    kevinAnswer: 4, // Kévin : pas du tout d'accord
+    kevinAnswer: 4, // Kévin
     effect: [{ axis: "societe", agree: false }],
   },
   {
     id: "soc_5",
     axis: "societe",
     text: "Le droit à l'avortement doit être garanti sans restriction dans les délais légaux.",
-    kevinAnswer: 0, // Kévin : absolument d'accord
+    kevinAnswer: 0, // Kévin
     effect: [{ axis: "societe", agree: true }],
   },
 
@@ -101,28 +101,28 @@ const QUESTIONS = [
     id: "eta_1",
     axis: "etat",
     text: "La légalisation du cannabis récréatif serait une mesure raisonnable.",
-    kevinAnswer: 1, // Kévin : plutôt d'accord
+    kevinAnswer: 1, // Kévin
     effect: [{ axis: "etat", agree: true }],
   },
   {
     id: "eta_2",
     axis: "etat",
     text: "La surveillance de masse par l'État est acceptable si elle améliore la sécurité.",
-    kevinAnswer: 4, // Kévin : pas du tout d'accord
+    kevinAnswer: 4, // Kévin
     effect: [{ axis: "etat", agree: false }],
   },
   {
     id: "eta_3",
     axis: "etat",
     text: "Les individus doivent pouvoir prendre des risques pour eux-mêmes sans que l'État intervienne.",
-    kevinAnswer: 0, // Kévin : absolument d'accord
+    kevinAnswer: 2, // Kévin
     effect: [{ axis: "etat", agree: true }],
   },
   {
     id: "eta_4",
     axis: "etat",
     text: "L'État devrait avoir le droit de censurer des contenus jugés dangereux sur internet.",
-    kevinAnswer: 4, // Kévin : pas du tout d'accord
+    kevinAnswer: 2, // Kévin
     effect: [{ axis: "etat", agree: false }],
   },
 
@@ -131,28 +131,28 @@ const QUESTIONS = [
     id: "ecol_1",
     axis: "ecologie",
     text: "Le nucléaire doit jouer un rôle central dans la transition énergétique française.",
-    kevinAnswer: 1, // Kévin : plutôt d'accord
+    kevinAnswer: 1, // Kévin
     effect: [{ axis: "ecologie", agree: true }],
   },
   {
     id: "ecol_2",
     axis: "ecologie",
     text: "La croissance économique et la protection de l'environnement sont compatibles.",
-    kevinAnswer: 1, // Kévin : plutôt d'accord
+    kevinAnswer: 2, // Kévin
     effect: [{ axis: "ecologie", agree: true }],
   },
   {
     id: "ecol_3",
     axis: "ecologie",
     text: "Il faut interdire les vols intérieurs remplaçables par le train.",
-    kevinAnswer: 3, // Kévin : plutôt pas d'accord
+    kevinAnswer: 1, // Kévin
     effect: [{ axis: "ecologie", agree: false }],
   },
   {
     id: "ecol_4",
     axis: "ecologie",
     text: "La décroissance économique est nécessaire pour sauver la planète.",
-    kevinAnswer: 4, // Kévin : pas du tout d'accord
+    kevinAnswer: 1, // Kévin
     effect: [{ axis: "ecologie", agree: false }],
   },
 
@@ -161,28 +161,28 @@ const QUESTIONS = [
     id: "geo_1",
     axis: "geopolitique",
     text: "L'immigration est globalement une richesse économique et culturelle pour la France.",
-    kevinAnswer: 1, // Kévin : plutôt d'accord
+    kevinAnswer: 1, // Kévin
     effect: [{ axis: "geopolitique", agree: true }],
   },
   {
     id: "geo_2",
     axis: "geopolitique",
     text: "La France devrait renforcer les contrôles aux frontières et limiter l'immigration.",
-    kevinAnswer: 3, // Kévin : plutôt pas d'accord
+    kevinAnswer: 3, // Kévin
     effect: [{ axis: "geopolitique", agree: false }],
   },
   {
     id: "geo_3",
     axis: "geopolitique",
     text: "La construction européenne est globalement positive pour la France.",
-    kevinAnswer: 1, // Kévin : plutôt d'accord
+    kevinAnswer: 3, // Kévin
     effect: [{ axis: "geopolitique", agree: true }],
   },
   {
     id: "geo_4",
     axis: "geopolitique",
     text: "La souveraineté nationale doit primer sur les décisions des institutions européennes.",
-    kevinAnswer: 3, // Kévin : plutôt pas d'accord
+    kevinAnswer: 1, // Kévin
     effect: [{ axis: "geopolitique", agree: false }],
   },
 
@@ -191,28 +191,28 @@ const QUESTIONS = [
     id: "lai_1",
     axis: "laicite",
     text: "Les signes religieux ostentatoires n'ont pas leur place dans les services publics.",
-    kevinAnswer: 0, // Kévin : absolument d'accord
+    kevinAnswer: 1, // Kévin
     effect: [{ axis: "laicite", agree: true }],
   },
   {
     id: "lai_2",
     axis: "laicite",
     text: "La religion devrait rester strictement dans la sphère privée.",
-    kevinAnswer: 1, // Kévin : plutôt d'accord
+    kevinAnswer: 1, // Kévin
     effect: [{ axis: "laicite", agree: true }],
   },
   {
     id: "lai_3",
     axis: "laicite",
     text: "Les associations cultuelles ne devraient recevoir aucun financement public.",
-    kevinAnswer: 1, // Kévin : plutôt d'accord
+    kevinAnswer: 2, // Kévin
     effect: [{ axis: "laicite", agree: true }],
   },
   {
     id: "lai_4",
     axis: "laicite",
     text: "La France devrait reconnaître officiellement son héritage chrétien dans son identité nationale.",
-    kevinAnswer: 4, // Kévin : pas du tout d'accord
+    kevinAnswer: 3, // Kévin
     effect: [{ axis: "laicite", agree: false }],
   },
 
@@ -221,28 +221,28 @@ const QUESTIONS = [
     id: "jus_1",
     axis: "justice",
     text: "La réinsertion des détenus devrait être la priorité absolue de la politique pénale.",
-    kevinAnswer: 1, // Kévin : plutôt d'accord
+    kevinAnswer: 1, // Kévin
     effect: [{ axis: "justice", agree: true }],
   },
   {
     id: "jus_2",
     axis: "justice",
     text: "Les peines minimales obligatoires sont nécessaires pour certains crimes graves.",
-    kevinAnswer: 3, // Kévin : plutôt pas d'accord
+    kevinAnswer: 3, // Kévin
     effect: [{ axis: "justice", agree: false }],
   },
   {
     id: "jus_3",
     axis: "justice",
     text: "La police a globalement besoin de plus de moyens et d'effectifs.",
-    kevinAnswer: 3, // Kévin : plutôt pas d'accord
+    kevinAnswer: 3, // Kévin
     effect: [{ axis: "justice", agree: false }],
   },
   {
     id: "jus_4",
     axis: "justice",
     text: "Les violences policières sont un problème structurel en France qui mérite une réforme profonde.",
-    kevinAnswer: 0, // Kévin : absolument d'accord
+    kevinAnswer: 0, // Kévin
     effect: [{ axis: "justice", agree: true }],
   },
 
@@ -251,28 +251,28 @@ const QUESTIONS = [
     id: "tec_1",
     axis: "tech",
     text: "L'intelligence artificielle va globalement améliorer la qualité de vie des gens.",
-    kevinAnswer: 0, // Kévin : absolument d'accord
+    kevinAnswer: 1, // Kévin
     effect: [{ axis: "tech", agree: true }],
   },
   {
     id: "tec_2",
     axis: "tech",
     text: "Les grandes entreprises tech ont trop de pouvoir et devraient être démembrées.",
-    kevinAnswer: 2, // Kévin : neutre
+    kevinAnswer: 1, // Kévin
     effect: [{ axis: "tech", agree: false }],
   },
   {
     id: "tec_3",
     axis: "tech",
     text: "Le progrès technologique est la meilleure réponse aux grands défis de l'humanité.",
-    kevinAnswer: 1, // Kévin : plutôt d'accord
+    kevinAnswer: 1, // Kévin
     effect: [{ axis: "tech", agree: true }],
   },
   {
     id: "tec_4",
     axis: "tech",
     text: "Il faudrait un moratoire sur certains développements technologiques risqués.",
-    kevinAnswer: 3, // Kévin : plutôt pas d'accord
+    kevinAnswer: 3, // Kévin
     effect: [{ axis: "tech", agree: false }],
   },
 ];
