@@ -124,7 +124,7 @@
 
   // ── Copier score ─────────────────────────────────────────
   window.copyShare = function() {
-    const text = `J'ai fait le KevinScale : ${global}% de proximité avec Kévin — "${verdict.emoji} ${verdict.title}". Et toi ? https://kevinraphael95.github.io/tst/`;
+    const text = `J'ai fait le KevinScale : ${global}% de proximité avec Kévin — "${verdict.emoji} ${verdict.title}". Et toi ? https://kevinraphael95.github.io/kevinscale/`;
     navigator.clipboard?.writeText(text).then(() => {
       const btn = document.getElementById("btn-copy");
       const orig = btn.textContent;
@@ -160,7 +160,7 @@
     ctx.font = "13px Arial, sans-serif";
     ctx.fillStyle = "rgba(255,255,255,.7)";
     ctx.textAlign = "right";
-    ctx.fillText("kevinraphael95.github.io/tst", W - PAD, 35);
+    ctx.fillText("kevinraphael95.github.io/kevinscale", W - PAD, 35);
 
     // Drapeau centré
     const FW = 200, FH = 120;
@@ -242,7 +242,7 @@
     ctx.fillStyle = "#aaa";
     ctx.font = "11px Arial";
     ctx.textAlign = "center";
-    ctx.fillText("KevinScale · kevinraphael95.github.io/tst · Résultats calculés localement", W / 2, H - 14);
+    ctx.fillText("KevinScale · kevinraphael95.github.io/kevinscale · Résultats calculés localement", W / 2, H - 14);
 
     const link = document.createElement("a");
     link.download = "kevinscale-resultats.png";
