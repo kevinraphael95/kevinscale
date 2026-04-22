@@ -208,10 +208,10 @@ footer a:hover { color: #fff; }
 
 .btn-start {
   display: inline-block;
-  margin-top: 0;
+  margin-top: 28px;
   background: var(--purple);
   color: #fff;
-  border: 2px solid var(--purple);
+  border: none;
   padding: 13px 36px;
   font-size: var(--fs-md);
   font-weight: 600;
@@ -565,55 +565,6 @@ footer a:hover { color: #fff; }
   .axis-row-label-right { width: 100%; text-align: left; }
 }
 
-/* ── BARRES RÉSULTATS STYLE POLITISCALES ─────────────────── */
-.ps-axis-row {
-  margin-bottom: 22px;
-}
-
-.ps-axis-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 5px;
-}
-
-.ps-axis-title {
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: #777;
-  letter-spacing: 1px;
-}
-
-.ps-axis-near,
-.ps-axis-far {
-  font-size: 0.75rem;
-  color: #aaa;
-}
-
-.ps-bar-row {
-  display: flex;
-  height: 28px;
-  border-radius: 3px;
-  overflow: hidden;
-  width: 100%;
-}
-
-.ps-seg {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: #fff;
-  min-width: 0;
-  transition: width 1s cubic-bezier(.16,1,.3,1);
-}
-
-.ps-seg-neut {
-  background: #c8c8c8;
-  color: #666;
-}
-
 /* ── BOUTONS ACCUEIL ─────────────────────────────────────── */
 .intro-buttons {
   display: flex;
@@ -622,6 +573,24 @@ footer a:hover { color: #fff; }
   flex-wrap: wrap;
   margin-top: 28px;
 }
+
+.btn-start {
+  display: inline-block;
+  margin-top: 0;
+  background: var(--purple);
+  color: #fff;
+  border: 2px solid var(--purple);
+  padding: 13px 28px;
+  font-size: var(--fs-md);
+  font-weight: 600;
+  border-radius: var(--radius);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background var(--transition), transform var(--transition);
+  letter-spacing: .3px;
+}
+
+.btn-start:hover { background: var(--purple-dark); border-color: var(--purple-dark); transform: translateY(-1px); }
 
 .btn-resume {
   display: inline-block;
@@ -638,10 +607,76 @@ footer a:hover { color: #fff; }
   letter-spacing: .3px;
 }
 
-.btn-resume:hover {
-  background: var(--purple);
+.btn-resume:hover { background: var(--purple); color: #fff; transform: translateY(-1px); }
+
+/* ── ZONE QUESTION : hauteur réduite ─────────────────────── */
+.q-text-wrap {
+  height: 100px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.q-text {
+  font-size: var(--fs-xl);
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text);
+}
+
+/* ── BARRES RÉSULTATS — simple 0→100% ────────────────────── */
+.ps-axis-row {
+  margin-bottom: 20px;
+}
+
+.ps-axis-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.ps-axis-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #777;
+  letter-spacing: 1px;
+  flex: 1;
+  text-align: center;
+}
+
+.ps-axis-pct {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text);
+  min-width: 40px;
+  text-align: right;
+}
+
+.ps-bar-simple-track {
+  height: 28px;
+  background: #ddd;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.ps-bar-simple-fill {
+  height: 100%;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
   color: #fff;
-  transform: translateY(-1px);
+  transition: width 1s cubic-bezier(.16,1,.3,1);
+  min-width: 0;
+}
+
+/* ── ? VISIBLE SUR MOBILE ────────────────────────────────── */
+@media (max-width: 640px) {
+  .headerLeft { display: flex !important; }
 }
 
 /* ── PAGE ABOUT ──────────────────────────────────────────── */
@@ -671,9 +706,7 @@ footer a:hover { color: #fff; }
   border-bottom: 1px solid var(--border);
 }
 
-.about-axis:last-of-type {
-  border-bottom: none;
-}
+.about-axis:last-of-type { border-bottom: none; }
 
 .about-axis-header {
   display: flex;
@@ -705,6 +738,4 @@ footer a:hover { color: #fff; }
 
 .about-axis p:last-child { margin-bottom: 0; }
 
-.header-active {
-  color: #fff !important;
-}
+.header-active { color: #fff !important; }

@@ -62,7 +62,6 @@
     { text: "Pas du tout d'accord", cls: "disagree-2" },
   ];
 
-  const WEIGHTS = [2, 1, 0, 1, 2];
 
   let state = { current: 0, answers: {}, shuffled: [] };
 
@@ -125,23 +124,37 @@
   function advance() {
     const q = state.shuffled[state.current];
     if (state.current >= state.shuffled.length - 1) {
-      const axisScores = {};
-      AXES.forEach(a => axisScores[a.id] = { sum: 0, max: 0 });
+      // Calcul : pour chaque axe on accumule les points d'accord avec Kévin.
+      // Réponse 0 (tout à fait d'accord) = +2 si agree:true, -2 si agree:false
+      // Réponse 1 (plutôt d'accord)      = +1 / -1
+      // Réponse 2 (neutre)               = 0 (ignoré)
+      // Réponse 3 (plutôt pas d'accord)  = -1 / +1
+      // Réponse 4 (pas du tout d'accord) = -2 / +2
+      // Score final = (somme + max_possible) / (2 * max_possible) * 100
+      // → 100% si toujours d'accord avec Kevin, 0% si toujours opposé, 50% si neutre partout
+      const WEIGHTS = [2, 1, 0, 1, 2];
+      const axisData = {};
+      AXES.forEach(a => axisData[a.id] = { sum: 0, max: 0 });
+
       state.shuffled.forEach(q => {
         const val = state.answers[q.id];
-        if (val === undefined) return;
-        const w = WEIGHTS[val];
-        const dir = val <= 1 ? 1 : val >= 3 ? -1 : 0;
-        const delta = w * dir;
+        if (val === undefined || val === 2) return; // neutre = skip
+        const w   = WEIGHTS[val];
+        const dir = val <= 1 ? 1 : -1;             // accord = +, désaccord = -
         q.effect.forEach(({ axis, agree }) => {
-          axisScores[axis].sum += agree ? delta : -delta;
-          axisScores[axis].max += 2;
+          // contribution : si on est d'accord ET que c'est "agree:true" → positif
+          const contrib = dir * (agree ? 1 : -1) * w;
+          axisData[axis].sum += contrib;
+          axisData[axis].max += w;
         });
       });
+
       const final = {};
       AXES.forEach(a => {
-        const { sum, max } = axisScores[a.id];
-        final[a.id] = max === 0 ? 50 : Math.round(((sum + max) / (2 * max)) * 100);
+        const { sum, max } = axisData[a.id];
+        if (max === 0) { final[a.id] = 50; return; }
+        // Ramène [-max, +max] → [0, 100]
+        final[a.id] = Math.round(((sum + max) / (2 * max)) * 100);
       });
       sessionStorage.setItem("ks_scores", JSON.stringify(final));
       window.location.href = "results.html";

@@ -93,20 +93,11 @@
     document.getElementById("flag-wrap").innerHTML = svg;
   })();
 
-  // ── Barres par axe style PolitiScales ───────────────────
-  // Chaque barre = [% proche] [% neutre] [% opposé]
-  // Proche = score, Opposé = 100-score, Neutre = zone centrale
+  // ── Barres par axe — simple 0→100% proximité ────────────
   const axesList = document.getElementById("axes-list");
 
   AXES.forEach((axis, idx) => {
-    const prox  = scores[axis.id] || 50;
-    const oppos = 100 - prox;
-    // Zone neutre : on compresse les extrêmes vers le centre
-    const spread   = Math.abs(prox - 50);          // 0=neutre, 50=max tranché
-    const neutralW = Math.max(10, 40 - spread);    // 10–40%
-    const proxW    = Math.round((prox  / 100) * (100 - neutralW));
-    const opposW   = Math.round((oppos / 100) * (100 - neutralW));
-    const neutW    = 100 - proxW - opposW;
+    const prox = scores[axis.id] || 0;
 
     const row = document.createElement("div");
     row.className = "ps-axis-row";
@@ -114,19 +105,12 @@
 
     row.innerHTML = `
       <div class="ps-axis-meta">
-        <span class="ps-axis-near">Proche Kévin</span>
         <span class="ps-axis-title">${axis.label.toUpperCase()}</span>
-        <span class="ps-axis-far">Opposé</span>
+        <span class="ps-axis-pct">${prox}%</span>
       </div>
-      <div class="ps-bar-row">
-        <div class="ps-seg ps-seg-prox"  style="width:${proxW}%;background:${axis.color}">
-          ${proxW > 7 ? proxW + "%" : ""}
-        </div>
-        <div class="ps-seg ps-seg-neut"  style="width:${neutW}%">
-          ${neutW > 7 ? neutW + "%" : ""}
-        </div>
-        <div class="ps-seg ps-seg-oppos" style="width:${opposW}%;background:${axis.color};opacity:.3">
-          ${opposW > 7 ? opposW + "%" : ""}
+      <div class="ps-bar-simple-track">
+        <div class="ps-bar-simple-fill" style="width:${prox}%;background:${axis.color}">
+          ${prox > 10 ? prox + "%" : ""}
         </div>
       </div>
     `;
@@ -220,69 +204,38 @@
 
     // Axes
     const AY   = VY + 46;
-    const BAR_X = PAD + 170;
-    const BAR_W = W - BAR_X - PAD;
+    const BAR_X = PAD + 200;
+    const BAR_W = W - BAR_X - PAD - 50;
     const BAR_H = 26;
 
     AXES.forEach((axis, i) => {
-      const prox  = scores[axis.id] || 50;
-      const oppos = 100 - prox;
-      const spread   = Math.abs(prox - 50);
-      const neutralW = Math.max(10, 40 - spread);
-      const proxW    = Math.round((prox  / 100) * (100 - neutralW));
-      const opposW   = Math.round((oppos / 100) * (100 - neutralW));
-      const neutW    = 100 - proxW - opposW;
+      const prox  = scores[axis.id] || 0;
+      const ry    = AY + i * ROW_H;
+      const barY  = ry + 28;
+      const BAR_H = 26;
 
-      const ry   = AY + i * ROW_H;
-      const barY = ry + 28;
-
-      // Nom axe à gauche
-      ctx.fillStyle = "#555";
-      ctx.font = "11px Arial, sans-serif";
-      ctx.textAlign = "left";
-      ctx.fillText("Proche Kévin", PAD, barY - 8);
+      // Nom axe
       ctx.fillStyle = "#222";
-      ctx.font = "bold 12px Arial, sans-serif";
-      ctx.textAlign = "center";
-      ctx.fillText(axis.label.toUpperCase(), PAD + 80, barY + 14);
+      ctx.font = "bold 11px Arial, sans-serif";
+      ctx.textAlign = "left";
+      ctx.fillText(axis.label.toUpperCase(), PAD, barY + 16);
 
-      const lw = (proxW / 100) * BAR_W;
-      const nw = (neutW / 100) * BAR_W;
-      const rw = (opposW / 100) * BAR_W;
-
-      // Barre proximité
-      ctx.fillStyle = axis.color;
-      roundRect(ctx, BAR_X, barY, lw, BAR_H, [3, 0, 0, 3]);
+      // Fond gris
+      ctx.fillStyle = "#d0d0d0";
+      roundRect(ctx, BAR_X, barY, BAR_W, BAR_H, 3);
       ctx.fill();
-      if (proxW > 7) {
-        ctx.fillStyle = "#fff";
-        ctx.font = "bold 12px Arial";
-        ctx.textAlign = "center";
-        ctx.fillText(proxW + "%", BAR_X + lw / 2, barY + 17);
-      }
 
-      // Barre neutre
-      ctx.fillStyle = "#c0c0c0";
-      ctx.fillRect(BAR_X + lw, barY, nw, BAR_H);
-      if (neutW > 7) {
-        ctx.fillStyle = "#777";
-        ctx.font = "12px Arial";
-        ctx.textAlign = "center";
-        ctx.fillText(neutW + "%", BAR_X + lw + nw / 2, barY + 17);
-      }
-
-      // Barre opposé (délavée)
-      ctx.globalAlpha = 0.35;
+      // Barre colorée
+      const fillW = Math.max(4, (prox / 100) * BAR_W);
       ctx.fillStyle = axis.color;
-      roundRect(ctx, BAR_X + lw + nw, barY, rw, BAR_H, [0, 3, 3, 0]);
+      roundRect(ctx, BAR_X, barY, fillW, BAR_H, prox > 95 ? 3 : [3, 0, 0, 3]);
       ctx.fill();
-      ctx.globalAlpha = 1;
-      if (opposW > 7) {
-        ctx.fillStyle = "#fff";
-        ctx.font = "bold 12px Arial";
-        ctx.textAlign = "center";
-        ctx.fillText(opposW + "%", BAR_X + lw + nw + rw / 2, barY + 17);
-      }
+
+      // % à droite de la barre
+      ctx.fillStyle = "#333";
+      ctx.font = "bold 13px Arial";
+      ctx.textAlign = "left";
+      ctx.fillText(prox + "%", BAR_X + BAR_W + 8, barY + 17);
     });
 
     // Footer
