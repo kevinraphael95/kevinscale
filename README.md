@@ -1,1 +1,1 @@
-https://kevinraphael95.github.io/tst/
+https://kevinraphael95.github.io/kevinscale/
