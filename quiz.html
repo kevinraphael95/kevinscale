@@ -12,13 +12,11 @@
 <header>
   <div id="header">
     <div class="headerLeft">
-      <!--
       <a href="index.html" title="Accueil"><i class="fa fa-home"></i></a>
-      -->
       <a href="about.html" title="Aide"><i class="fa fa-question-circle"></i></a>
     </div>
     <div class="headerMiddle">
-      <h1><a href="index.html">⚖️ KevinScale</a></h1>
+      <h1><a href="index.html">KevinScale</a></h1>
     </div>
     <div class="headerRight"></div>
   </div>
@@ -48,7 +46,7 @@
 </div>
 
 <footer>
-  Un test inspiré de <a href="https://politiscales.fr" target="_blank">PolitiScales</a>.
+  Un test inspiré de <a href="https://politiscales.fr" target="_blank">PolitiScales</a>. Résultats calculés localement · Aucune donnée collectée.
 </footer>
 
 <script src="questions.js"></script>
@@ -131,24 +129,46 @@
   function advance() {
     const q = state.shuffled[state.current];
     if (state.current >= state.shuffled.length - 1) {
-      const axisScores = {};
-      AXES.forEach(a => axisScores[a.id] = { sum: 0, max: 0 });
+      const WEIGHTS = [2, 1, 0, 1, 2];
+
+      // Partie 1 : position utilisateur sur chaque axe (0-100)
+      const axisPos = {};
+      AXES.forEach(a => axisPos[a.id] = { sum: 0, max: 0 });
+      state.shuffled.forEach(q => {
+        const val = state.answers[q.id];
+        if (val === undefined || val === 2) return;
+        const w   = WEIGHTS[val];
+        const dir = val <= 1 ? 1 : -1;
+        q.effect.forEach(({ axis, agree }) => {
+          axisPos[axis].sum += dir * (agree ? 1 : -1) * w;
+          axisPos[axis].max += w;
+        });
+      });
+
+      // Partie 2 : proximité des réponses avec kevinAnswer (0-100)
+      const axisProx = {};
+      AXES.forEach(a => axisProx[a.id] = { total: 0, count: 0 });
       state.shuffled.forEach(q => {
         const val = state.answers[q.id];
         if (val === undefined) return;
-        const w = WEIGHTS[val];
-        const dir = val <= 1 ? 1 : val >= 3 ? -1 : 0;
-        const delta = w * dir;
-        q.effect.forEach(({ axis, agree }) => {
-          axisScores[axis].sum += agree ? delta : -delta;
-          axisScores[axis].max += 2;
-        });
+        axisProx[q.axis].total += 1 - Math.abs(val - q.kevinAnswer) / 4;
+        axisProx[q.axis].count += 1;
       });
+
       const final = {};
       AXES.forEach(a => {
-        const { sum, max } = axisScores[a.id];
-        final[a.id] = max === 0 ? 50 : Math.round(((sum + max) / (2 * max)) * 100);
+        // Score de position (0-100)
+        const { sum, max } = axisPos[a.id];
+        const userPos = max === 0 ? 50 : Math.round(((sum + max) / (2 * max)) * 100);
+        // Proximité de position avec kevinScore (0-100)
+        const posProx = Math.round((1 - Math.abs(userPos - a.kevinScore) / 100) * 100);
+        // Proximité des réponses (0-100)
+        const { total, count } = axisProx[a.id];
+        const answProx = count === 0 ? 50 : Math.round((total / count) * 100);
+        // Final = 60% position + 40% réponses
+        final[a.id] = Math.round(posProx * 0.6 + answProx * 0.4);
       });
+
       sessionStorage.setItem("ks_scores", JSON.stringify(final));
       window.location.href = "results.html";
     } else {
