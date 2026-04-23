@@ -22,7 +22,7 @@ const AXES = [
     color: "#e63946",
     left:  "Étatiste",
     right: "Libéral",
-    kevinScore: 68, // Kévin est plutôt libéral
+    kevinScore: 20,
   },
   {
     id: "societe",
@@ -30,7 +30,7 @@ const AXES = [
     color: "#ab47bc",
     left:  "Conservateur",
     right: "Progressiste",
-    kevinScore: 72, // Kévin est progressiste
+    kevinScore: 90,
   },
   {
     id: "etat",
@@ -38,7 +38,7 @@ const AXES = [
     color: "#ffa726",
     left:  "Autoritaire",
     right: "Libertaire",
-    kevinScore: 70, // Kévin est libertaire
+    kevinScore: 70,
   },
   {
     id: "ecologie",
@@ -46,7 +46,7 @@ const AXES = [
     color: "#66bb6a",
     left:  "Écologiste",
     right: "Productiviste",
-    kevinScore: 60, // Kévin est modérément productiviste
+    kevinScore: 60,
   },
   {
     id: "geopolitique",
@@ -54,7 +54,7 @@ const AXES = [
     color: "#29b6f6",
     left:  "Nationaliste",
     right: "Internationaliste",
-    kevinScore: 62, // Kévin est plutôt internationaliste
+    kevinScore: 65,
   },
   {
     id: "laicite",
@@ -62,7 +62,7 @@ const AXES = [
     color: "#ffca28",
     left:  "Religieux",
     right: "Laïque",
-    kevinScore: 75, // Kévin est très laïque
+    kevinScore: 75, 
   },
   {
     id: "justice",
@@ -70,7 +70,7 @@ const AXES = [
     color: "#ef5350",
     left:  "Répressif",
     right: "Réhabilitatif",
-    kevinScore: 65, // Kévin est plutôt réhabilitatif
+    kevinScore: 70,
   },
   {
     id: "tech",
@@ -78,7 +78,7 @@ const AXES = [
     color: "#26c6da",
     left:  "Tech-sceptique",
     right: "Tech-optimiste",
-    kevinScore: 78, // Kévin est très tech-optimiste
+    kevinScore: 65,
   },
 ];
 
