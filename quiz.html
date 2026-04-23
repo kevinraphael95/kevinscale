@@ -131,42 +131,49 @@
     if (state.current >= state.shuffled.length - 1) {
       const WEIGHTS = [2, 1, 0, 1, 2];
 
-      // Partie 1 : position utilisateur sur chaque axe (0-100)
+      // ── Étape 1 : position utilisateur sur l'axe (0–100) ──
+      // agree:true  + d'accord → pousse vers gauche (0)
+      // agree:false + d'accord → pousse vers droite (100)
       const axisPos = {};
       AXES.forEach(a => axisPos[a.id] = { sum: 0, max: 0 });
       state.shuffled.forEach(q => {
         const val = state.answers[q.id];
         if (val === undefined || val === 2) return;
         const w   = WEIGHTS[val];
-        const dir = val <= 1 ? 1 : -1;
-        q.effect.forEach(({ axis, agree }) => {
-          axisPos[axis].sum += dir * (agree ? 1 : -1) * w;
-          axisPos[axis].max += w;
-        });
+        const dir = val <= 1 ? 1 : -1; // d'accord=+1, pas d'accord=-1
+        // agree:true → d'accord pousse à gauche (négatif), agree:false → droite (positif)
+        const contrib = dir * (q.agree ? -1 : 1) * w;
+        axisPos[q.axis].sum += contrib;
+        axisPos[q.axis].max += w;
       });
 
-      // Partie 2 : proximité des réponses avec kevinAnswer (0-100)
-      const axisProx = {};
-      AXES.forEach(a => axisProx[a.id] = { total: 0, count: 0 });
+      // ── Étape 2 : bonus proximité réponses avec kevinAnswer ──
+      // Pour chaque question : 1 - |userAnswer - kevinAnswer| / 4
+      // → de 0 (opposé) à 1 (identique)
+      const axisBonus = {};
+      AXES.forEach(a => axisBonus[a.id] = { total: 0, count: 0 });
       state.shuffled.forEach(q => {
         const val = state.answers[q.id];
         if (val === undefined) return;
-        axisProx[q.axis].total += 1 - Math.abs(val - q.kevinAnswer) / 4;
-        axisProx[q.axis].count += 1;
+        axisBonus[q.axis].total += 1 - Math.abs(val - q.kevinAnswer) / 4;
+        axisBonus[q.axis].count += 1;
       });
 
       const final = {};
       AXES.forEach(a => {
-        // Score de position (0-100)
+        // Position user sur l'axe 0–100
         const { sum, max } = axisPos[a.id];
         const userPos = max === 0 ? 50 : Math.round(((sum + max) / (2 * max)) * 100);
-        // Proximité de position avec kevinScore (0-100)
+
+        // Proximité de position avec kevinScore : 100% si identique, 0% si opposé
         const posProx = Math.round((1 - Math.abs(userPos - a.kevinScore) / 100) * 100);
-        // Proximité des réponses (0-100)
-        const { total, count } = axisProx[a.id];
-        const answProx = count === 0 ? 50 : Math.round((total / count) * 100);
-        // Final = 60% position + 40% réponses
-        final[a.id] = Math.round(posProx * 0.6 + answProx * 0.4);
+
+        // Bonus réponses : moyenne de proximité par question (0–100)
+        const { total, count } = axisBonus[a.id];
+        const bonus = count === 0 ? 50 : Math.round((total / count) * 100);
+
+        // Score final : 70% position sur axe + 30% proximité des réponses
+        final[a.id] = Math.min(100, Math.round(posProx * 0.7 + bonus * 0.3));
       });
 
       sessionStorage.setItem("ks_scores", JSON.stringify(final));
