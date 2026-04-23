@@ -46,7 +46,7 @@ const AXES = [
     color: "#66bb6a",
     left:  "Écologiste",
     right: "Productiviste",
-    kevinScore: 50,
+    kevinScore: 40,
   },
   {
     id: "geopolitique",
