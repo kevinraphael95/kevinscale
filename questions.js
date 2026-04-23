@@ -78,7 +78,7 @@ const AXES = [
     color: "#26c6da",
     left:  "Tech-sceptique",
     right: "Tech-optimiste",
-    kevinScore: 60,
+    kevinScore: 50,
   },
 ];
 
