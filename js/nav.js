@@ -44,14 +44,9 @@
 <div id="ks-footer">
   <div class="ks-footer-inner">
     <div class="ks-footer-links">
-      <a href="index.html">Accueil</a>
-      <a href="quiz.html">Passer le test</a>
-      <a href="about.html">À propos</a>
-      <a href="https://politiscales.fr" target="_blank" rel="noopener">PolitiScales ↗</a>
-    </div>
-    <div class="ks-footer-copy">
       KevinScale — Test d'affinité idéologique · <a href="https://github.com/kevinraphael95/kevinscale" target="_blank" rel="noopener">GitHub ↗</a>
     </div>
+  
   </div>
 </div>`;
 
