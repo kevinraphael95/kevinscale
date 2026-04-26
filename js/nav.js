@@ -41,14 +41,16 @@
 
   // ── Footer ───────────────────────────────────────────────
   const footerHTML = `
-<div id="ks-footer">
-  <div class="ks-footer-inner">
-    <div class="ks-footer-links">
-      KevinScale — Test d'affinité idéologique · <a href="https://github.com/kevinraphael95/kevinscale" target="_blank" rel="noopener">GitHub ↗</a>
+  <div id="ks-footer">
+    <div class="ks-footer-inner">
+      <div class="ks-footer-links">
+        <a href="https://politiscales.fr" target="_blank" rel="noopener">PolitiScales ↗</a>
+      </div>
+      <div class="ks-footer-copy">
+        KevinScale — Test d'affinité idéologique · <a href="https://github.com/kevinraphael95/kevinscale" target="_blank" rel="noopener">GitHub ↗</a>
+      </div>
     </div>
-  
-  </div>
-</div>`;
+  </div>`;
 
   // ── Injection ────────────────────────────────────────────
   document.addEventListener("DOMContentLoaded", function () {
