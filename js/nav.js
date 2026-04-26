@@ -22,18 +22,20 @@
   }
 
   // ── Header ───────────────────────────────────────────────
+  const aboutActive = isActive("about.html") ? ' class="nav-active"' : '';
   const headerHTML = `
 <div id="ks-header">
   <div class="ks-header-inner">
-    <a href="index.html" class="ks-logo">
-      <span class="ks-logo-icon">⚖️</span>
-      <span class="ks-logo-text">KevinScale</span>
-    </a>
-    <nav class="ks-nav">
-      ${navLink("index.html",   "fa-home",          "Accueil")}
-      ${navLink("quiz.html",    "fa-pencil-square-o","Passer le test")}
-      ${navLink("about.html",   "fa-info-circle",   "À propos")}
-    </nav>
+    <div class="ks-header-left">
+      <a href="about.html" title="À propos"${aboutActive}><i class="fa fa-question-circle"></i></a>
+    </div>
+    <div class="ks-header-middle">
+      <a href="index.html" class="ks-logo">
+        <span class="ks-logo-icon">⚖️</span>
+        <span class="ks-logo-text">KevinScale</span>
+      </a>
+    </div>
+    <div class="ks-header-right"></div>
   </div>
 </div>`;
 
